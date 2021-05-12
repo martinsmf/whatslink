@@ -1,6 +1,40 @@
 <template>
   <div class="dashboard">
-    <h1>Seu gerenciador digital de contatos</h1>
+    <div class="container">
+      <h1 class="title is-4">Seu gerenciador digital de contatos</h1>
+
+      <div class="columns">
+        <div
+          class="column is-4"
+          v-for="contact in contactList"
+          :key="contact.id"
+        >
+          <div class="card">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <img src="../assets/whatsapp.svg" alt="Logo WhatsApp" />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p class="title is-4">{{ contact.name }}</p>
+                  <p class="subtitle is-6">{{ contact.number }}</p>
+                </div>
+              </div>
+
+              <div class="content">
+                {{ contact.descripiton }}
+              </div>
+            </div>
+            <footer class="card-footer">
+              <a href="#" class="card-footer-item">Conversar</a>
+              <a href="#" class="card-footer-item">Apagar</a>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -8,6 +42,36 @@
 // @ is an alias to /src
 
 export default {
-  name: 'dashboard'
-}
+  name: "dashboard",
+  data() {
+    return {
+      contactName: "",
+      contactNumber: "",
+      contactDescription: "",
+      contactList: [
+        {
+          id: 1,
+          name: "Matheus Martins",
+          number: "31 9999999",
+          descripiton: "Solicitar consultoria em DevOps",
+        },
+        {
+          id: 2,
+          name: "Ray Charles",
+          number: "11 9999999",
+          descripiton: "Orçamento para aulas de inglês",
+        },
+      ],
+    };
+  },
+  method: {
+    addContac() {
+      this.contactList.push({
+        name: this.contacName,
+        number: this.contactNumber,
+        descripiton: this.contactDescription,
+      });
+    },
+  },
+};
 </script>
