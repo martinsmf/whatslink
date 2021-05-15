@@ -1,31 +1,50 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const mongoose = require('mongoose') //importa o framework mongoose
+
+const mongoURL = 'mongodb+srv://whatslinkDb:devtester@cluster0.ars9l.mongodb.net/zaplinkdb?retryWrites=true&w=majority'
+
+//conecta no banco
+mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
+
+//valida se a conexão foi bem sucedia
+mongoose.connection.on('connected', () => {
+    console.log('MongoDB connection')
+})
+
+//valida se a conexão falhou
+mongoose.connection.on('error', (error) => {
+    console.log('MongoDB error' + error)
+})
 
 const contactRoutes = require('./routes/contact.routes')
 
-const init = async () => {
+const server = Hapi.server({
+    port: 3000,
+    host: 'localhost'
+});
 
-    const server = Hapi.server({
-        port: 3000,
-        host: 'localhost'
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/',
-        handler: (request, h) => {
-            return {
-                message: "Welcome to WhastLink API - DevTester"
-            }
+server.route({
+    method: 'GET',
+    path: '/',
+    handler: (request, h) => {
+        return {
+            message: "Welcome to WhastLink API - DevTester"
         }
-    });
+    }
+});
 
-    server.route(contactRoutes)
+server.route(contactRoutes)
 
-    await server.start();
-    console.log('Server running on %s', server.info.uri);
-};
+server.start((err) => {
+
+    if (err) {
+        throw err;
+    }
+    console.log('Server running on %s', server.info.uri)
+});
+console.log('Server running on %s', server.info.uri);
 
 process.on('unhandledRejection', (err) => {
 
@@ -33,4 +52,6 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-init();
+exports.init = async () => {
+    return server;
+};
