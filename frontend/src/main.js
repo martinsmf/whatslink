@@ -5,6 +5,14 @@ import router from './router'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
+window.axios = require('axios')
+
+window.axios.defaults.baseURL = 'http://localhost:3000'
+
+window.axios.get('/contacts').then(async res => {
+  console.log(await res.data)
+})
+
 Vue.use(Buefy)
 
 Vue.config.productionTip = false

@@ -45,33 +45,18 @@ export default {
   name: "dashboard",
   data() {
     return {
-      contactName: "",
-      contactNumber: "",
-      contactDescription: "",
-      contactList: [
-        {
-          id: 1,
-          name: "Matheus Martins",
-          number: "31 9999999",
-          descripiton: "Solicitar consultoria em DevOps",
-        },
-        {
-          id: 2,
-          name: "Ray Charles",
-          number: "11 9999999",
-          descripiton: "Orçamento para aulas de inglês",
-        },
-      ],
+      contactList: []
     };
   },
-  method: {
-    addContac() {
-      this.contactList.push({
-        name: this.contacName,
-        number: this.contactNumber,
-        descripiton: this.contactDescription,
+  methods: {
+    list() {
+      window.axios.get("/contacts").then(async res => {
+        this.contactList = await res.data;
       });
-    },
+    }
   },
+  mounted() {
+    this.list();
+  }
 };
 </script>
