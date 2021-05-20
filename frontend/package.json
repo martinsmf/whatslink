@@ -1,5 +1,5 @@
 {
-  "name": "whatslink",
+  "name": "whatslink-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,8 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "buefy": "^0.9.7",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
