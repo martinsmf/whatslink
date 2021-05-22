@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <div class="container">
-      <h1 class="title is-4">Seu gerenciador digital de contatos</h1>
+      <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
 
       <div class="columns">
         <div

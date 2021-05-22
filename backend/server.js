@@ -25,7 +25,7 @@ const server = Hapi.server({
     host: 'localhost',
     routes: {
         cors: {
-            origin: ['*']
+            origin: ['http://localhost:8080']
         }
     }
 });
