@@ -13,12 +13,12 @@ describe('My First Test', () => {
 
 
     it('entao devo ver a lista de contatos', () => {
-      cy.get('.card').should('have.length', 3) //não é uma forma boa de validar pois a lista pode aumentar e quebrar o teste
+      //cy.get('.card').should('have.length', 3) não é uma forma boa de validar pois a lista pode aumentar e quebrar o teste
 
-      var t = cy.get('.card', { timeout: 5000 })
+      var t = cy.get('.card')
       expect(t).to.length > 0
 
-      cy.get('.card', { timeout: 5000 }).then((elements) => {
+      cy.get('.card').then((elements) => {
         expect(elements.length > 0).to.be.true
       })
     })

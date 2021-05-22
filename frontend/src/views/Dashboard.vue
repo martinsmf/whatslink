@@ -3,7 +3,7 @@
     <div class="container">
       <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
 
-      <div class="columns">
+      <div class="columns is-multiline">
         <div
           class="column is-4"
           v-for="contact in contactList"
@@ -24,7 +24,7 @@
               </div>
 
               <div class="content">
-                {{ contact.descripiton }}
+                {{ contact.description }}
               </div>
             </div>
             <footer class="card-footer">
