@@ -3,6 +3,13 @@
     <div class="container">
       <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
 
+      <b-button
+        label="+"
+        type="is-success"
+        size="is-medium"
+        @click="showContactAddModal = true"
+      />
+
       <div class="columns is-multiline">
         <div
           class="column is-4"
@@ -34,6 +41,57 @@
           </div>
         </div>
       </div>
+
+      <b-modal
+        v-model="showContactAddModal"
+        has-modal-card
+        trap-focus
+        :destroy-on-hide="false"
+        aria-role="dialog"
+        aria-label="Example Modal"
+        aria-modal
+      >
+        <form action="">
+          <div class="modal-card" style="width: 450px">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Novo Contato</p>
+              <button
+                type="button"
+                class="delete"
+                @click="showContactAddModal = false"
+              />
+            </header>
+            <section class="modal-card-body">
+              <div class="field">
+                <input
+                  type="text"
+                  class="input is-primary"
+                  placeholder="Nome completo"
+                />
+              </div>
+
+              <div class="field">
+                <input
+                  type="text"
+                  class="input is-primary"
+                  placeholder="WhatsApp"
+                />
+              </div>
+
+              <div class="field">
+                <textarea
+                  type="text"
+                  class="textarea is-primary"
+                  placeholder="Assunto"
+                />
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <b-button label="Cadastrar" type="is-success" />
+            </footer>
+          </div>
+        </form>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -45,7 +103,8 @@ export default {
   name: "dashboard",
   data() {
     return {
-      contactList: []
+      contactList: [],
+      showContactAddModal: false
     };
   },
   methods: {
