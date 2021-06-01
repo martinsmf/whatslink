@@ -19,7 +19,7 @@ describe('My First Test', () => {
       expect(t).to.length > 0
 
       cy.get('.card').then((elements) => {
-        expect(elements.length > 0).to.be.true
+        expect(elements.length >= 0).to.be.true
       })
     })
   })
