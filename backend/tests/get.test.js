@@ -26,9 +26,4 @@ describe('GET /contacts', () => {
     it('deve retornar uma lista', async () => {
         expect(contacts.result).to.be.array()
     })
-
-    it('deve retornar matheus', async () => {
-        var res = contacts.result[0]
-        expect(res.name).to.contains('Matheus Martins')
-    })
 })

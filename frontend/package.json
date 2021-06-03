@@ -5,12 +5,15 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test:e2e": "vue-cli-service test:e2e",
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run": "./node_modules/.bin/cypress run"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "buefy": "^0.9.7",
     "core-js": "^3.6.5",
+    "cypress": "7.4.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
