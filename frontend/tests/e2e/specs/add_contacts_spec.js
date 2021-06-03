@@ -1,22 +1,21 @@
 /// <reference types="Cypress" />
+
+import DashPage from '../support/pages/dash-page'
+import DashElement from '../support/elements/dash-element'
+
 describe('Cadastro de contatos', () => {
     describe('Novo  contato', () => {
-        let contact = {
-            name: 'Matheus',
-            nmber: '31 9999-999',
-            description: 'Solicitar orçamento para consultoria em QA'
-        }
 
         describe('Quando submeto o cadastro completo', () => {
+            let contact = {
+                name: 'Matheus',
+                number: '31 9999-999',
+                description: 'Solicitar orçamento para consultoria em QA'
+            }
+
             before(() => {
-                cy.visit('/dashboard')
-                cy.get('[data-qa-selector="add_contact"]').click()
-
-                cy.get('.input-name input').type(contact.name)
-                cy.get('.input-number input').type(contact.nmber)
-                cy.get('.text-description textarea').type(contact.description)
-
-                cy.get('[data-qa-selector="save-contact"]').click()
+                cy.dash()
+                DashPage.create(contact)
             })
 
             it('deve cadastrar esse contato', () => {
@@ -26,52 +25,55 @@ describe('Cadastro de contatos', () => {
         })
 
         describe('Quando submeto o cadastro sem o nome', () => {
+            let contact = {
+                name: '',
+                number: '31 9999-999',
+                description: 'Solicitar orçamento para consultoria em QA'
+            }
+
             before(() => {
-                cy.visit('/dashboard')
-                cy.get('[data-qa-selector="add_contact"]').click()
-
-                cy.get('.input-number input').type(contact.nmber)
-                cy.get('.text-description textarea').type(contact.description)
-
-                cy.get('[data-qa-selector="save-contact"]').click()
+                cy.dash()
+                DashPage.create(contact)
             })
 
             it('deve mostrar uma notificação', () => {
-                cy.get('.input-name small').contains('Nome é obrigatório')
+                DashElement.smallNameAlert.contains('Nome é obrigatório')
             })
 
         })
 
         describe('Quando submeto o cadastro sem o whatsapp', () => {
-            before(() => {
-                cy.visit('/dashboard')
-                cy.get('[data-qa-selector="add_contact"]').click()
+            let contact = {
+                name: 'Matheus',
+                number: '',
+                description: 'Solicitar orçamento para consultoria em QA'
+            }
 
-                cy.get('.input-name input').type(contact.name)
-                cy.get('.text-description textarea').type(contact.description)
-                cy.get('[data-qa-selector="save-contact"]').click()
+            before(() => {
+                cy.dash()
+                DashPage.create(contact)
             })
 
             it('deve mostrar uma notificação', () => {
-                cy.get('.input-number small').contains('WhatsApp é obrigatório')
+                DashElement.samllNumberAlert.contains('WhatsApp é obrigatório')
             })
 
         })
 
         describe('Quando submeto o cadastro sem a descrição', () => {
+            let contact = {
+                name: 'Matheus',
+                number: '31 9999-999',
+                description: ''
+            }
+
             before(() => {
-                cy.visit('/dashboard')
-                cy.get('[data-qa-selector="add_contact"]').click()
-
-                cy.get('.input-name input').type(contact.name)
-                cy.get('.input-number input').type(contact.nmber)
-
-
-                cy.get('[data-qa-selector="save-contact"]').click()
+                cy.dash()
+                DashPage.create(contact)
             })
 
             it('deve mostrar uma notificação', () => {
-                cy.get('.text-description small').contains('Assunto é obrigatório')
+                DashElement.smallDescriptionAlert.contains('Assunto é obrigatório')
             })
 
         })
