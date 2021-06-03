@@ -1,9 +1,47 @@
 <template>
   <div class="dashboard">
     <div class="container">
-      <h1 class="title is-4">Seu gerenciador digital de contatos</h1>
+      <!-- Main container -->
+      <nav class="level">
+        <!-- Left side -->
+        <div class="level-left">
+          <div class="level-item">
+            <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
+          </div>
+        </div>
 
-      <div class="columns">
+        <!-- Right side -->
+        <div class="level-right">
+          <div class="level-item">
+            <b-button
+              label="+"
+              type="is-success"
+              @click="showContactAddModal = true"
+              data-qa-selector="add_contact"
+            />
+          </div>
+
+          <div class="level-item">
+            <div class="field has-addons">
+              <p class="control">
+                <input
+                  v-model="searchInput"
+                  class="input"
+                  type="text"
+                  placeholder="Número do Whats"
+                />
+              </p>
+              <p class="control">
+                <button class="button is-primary" @click="search">
+                  Buscar
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="contact-list columns is-multiline">
         <div
           class="column is-4"
           v-for="contact in contactList"
@@ -24,7 +62,7 @@
               </div>
 
               <div class="content">
-                {{ contact.descripiton }}
+                {{ contact.description }}
               </div>
             </div>
             <footer class="card-footer">
@@ -34,6 +72,75 @@
           </div>
         </div>
       </div>
+
+      <b-modal
+        v-model="showContactAddModal"
+        has-modal-card
+        trap-focus
+        :destroy-on-hide="false"
+        aria-role="dialog"
+        aria-label="Example Modal"
+        aria-modal
+      >
+        <form action="">
+          <div class="modal-card" style="width: 450px">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Novo Contato</p>
+              <button
+                type="button"
+                class="delete"
+                @click="showContactAddModal = false"
+              />
+            </header>
+            <section class="modal-card-body">
+              <div class="field input-name">
+                <input
+                  v-model="form.name"
+                  type="text"
+                  class="input is-primary"
+                  placeholder="Nome completo"
+                />
+                <small class="has-text-danger" v-if="erroName === true"
+                  >Nome é obrigatório</small
+                >
+              </div>
+
+              <div class="field input-number">
+                <input
+                  v-model="form.number"
+                  type="text"
+                  class="input is-primary"
+                  placeholder="WhatsApp"
+                />
+                <small class="has-text-danger" v-if="erroNumber === true"
+                  >WhatsApp é obrigatório</small
+                >
+              </div>
+
+              <div class="field text-description">
+                <textarea
+                  v-model="form.description"
+                  type="text"
+                  class="textarea is-primary"
+                  placeholder="Assunto"
+                />
+                <small class="has-text-danger" v-if="erroDescription === true"
+                  >Assunto é obrigatório</small
+                >
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <b-button
+                label="Cadastrar"
+                class="is-success"
+                type="button"
+                @click="create"
+                data-qa-selector="save-contact"
+              />
+            </footer>
+          </div>
+        </form>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -45,33 +152,72 @@ export default {
   name: "dashboard",
   data() {
     return {
-      contactName: "",
-      contactNumber: "",
-      contactDescription: "",
-      contactList: [
-        {
-          id: 1,
-          name: "Matheus Martins",
-          number: "31 9999999",
-          descripiton: "Solicitar consultoria em DevOps",
-        },
-        {
-          id: 2,
-          name: "Ray Charles",
-          number: "11 9999999",
-          descripiton: "Orçamento para aulas de inglês",
-        },
-      ],
+      contactList: [],
+      showContactAddModal: false,
+      erroName: false,
+      erroNumber: false,
+      erroDescription: false,
+      searchInput: "",
+      form: {
+        name: "",
+        number: "",
+        description: ""
+      }
     };
   },
-  method: {
-    addContac() {
-      this.contactList.push({
-        name: this.contacName,
-        number: this.contactNumber,
-        descripiton: this.contactDescription,
-      });
+  methods: {
+    search() {
+      console.log(this.searchInput);
+      if (this.searchInput != "") {
+        this.contactList = this.contactList.filter(contact => {
+          if (contact.name) return contact.name === this.searchInput;
+          if (contact.number) return contact.number === this.searchInput;
+        });
+      } else {
+        this.list();
+      }
     },
+    create() {
+      this.erroName = false;
+      this.erroNumber = false;
+      this.erroDescription = false;
+
+      if (this.form.name === "") {
+        this.erroName = true;
+      }
+
+      if (this.form.number === "") {
+        this.erroNumber = true;
+      }
+
+      if (this.form.description === "") {
+        this.erroDescription = true;
+      }
+
+      if (
+        this.erroName === false &&
+        this.erroNumber === false &&
+        this.erroDescription === false
+      ) {
+        try {
+          window.axios.post("/contacts", this.form).then(async res => {
+            await res.data;
+            this.showContactAddModal = false;
+            this.list();
+          });
+        } catch (erro) {
+          console.log(erro);
+        }
+      }
+    },
+    list() {
+      window.axios.get("/contacts").then(async res => {
+        this.contactList = await res.data;
+      });
+    }
   },
+  mounted() {
+    this.list();
+  }
 };
 </script>
