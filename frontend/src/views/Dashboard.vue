@@ -1,15 +1,45 @@
 <template>
   <div class="dashboard">
     <div class="container">
-      <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
+      <!-- Main container -->
+      <nav class="level">
+        <!-- Left side -->
+        <div class="level-left">
+          <div class="level-item">
+            <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
+          </div>
+        </div>
 
-      <b-button
-        label="+"
-        type="is-success"
-        size="is-medium"
-        @click="showContactAddModal = true"
-        data-qa-selector="add_contact"
-      />
+        <!-- Right side -->
+        <div class="level-right">
+          <div class="level-item">
+            <b-button
+              label="+"
+              type="is-success"
+              @click="showContactAddModal = true"
+              data-qa-selector="add_contact"
+            />
+          </div>
+
+          <div class="level-item">
+            <div class="field has-addons">
+              <p class="control">
+                <input
+                  v-model="searchInput"
+                  class="input"
+                  type="text"
+                  placeholder="Número do Whats"
+                />
+              </p>
+              <p class="control">
+                <button class="button is-primary" @click="search">
+                  Buscar
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       <div class="contact-list columns is-multiline">
         <div
@@ -127,6 +157,7 @@ export default {
       erroName: false,
       erroNumber: false,
       erroDescription: false,
+      searchInput: "",
       form: {
         name: "",
         number: "",
@@ -135,6 +166,17 @@ export default {
     };
   },
   methods: {
+    search() {
+      console.log(this.searchInput);
+      if (this.searchInput != "") {
+        this.contactList = this.contactList.filter(contact => {
+          if (contact.name) return contact.name === this.searchInput;
+          if (contact.number) return contact.number === this.searchInput;
+        });
+      } else {
+        this.list();
+      }
+    },
     create() {
       this.erroName = false;
       this.erroNumber = false;
