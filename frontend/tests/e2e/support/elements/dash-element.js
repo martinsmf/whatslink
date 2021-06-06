@@ -1,5 +1,13 @@
 class DashElement {
 
+    get cardsDash() {
+        return cy.get('.card')
+    }
+
+    get inputSearch() {
+        return cy.get('.level-right input')
+    }
+
     get inputFullName() {
         return cy.get('.input-name input')
     }
@@ -10,6 +18,10 @@ class DashElement {
 
     get inputDescription() {
         return cy.get('.text-description textarea')
+    }
+
+    get buttonSearch() {
+        return cy.get('[data-qa-selector=search]')
     }
 
     get buttonAddContact() {

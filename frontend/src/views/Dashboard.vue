@@ -32,7 +32,11 @@
                 />
               </p>
               <p class="control">
-                <button class="button is-primary" @click="search">
+                <button
+                  class="button is-primary"
+                  data-qa-selector="search"
+                  @click="search"
+                >
                   Buscar
                 </button>
               </p>
@@ -169,10 +173,11 @@ export default {
     search() {
       console.log(this.searchInput);
       if (this.searchInput != "") {
-        this.contactList = this.contactList.filter(contact => {
-          if (contact.name) return contact.name === this.searchInput;
-          if (contact.number) return contact.number === this.searchInput;
-        });
+        this.contactList = this.contactList.filter(
+          contact =>
+            contact.number === this.searchInput ||
+            contact.name === this.searchInput
+        );
       } else {
         this.list();
       }
