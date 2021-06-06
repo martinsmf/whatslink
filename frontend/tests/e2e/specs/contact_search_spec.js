@@ -14,6 +14,7 @@ describe('Busca', () => {
         before(() => {
             cy.dash()
             DashPage.search(contact.number)
+            cy.get('#loader', { timeout: 5000 }).should('not.exist')
         })
 
         it('Devo ver somente esse contato no dashboard', () => {
