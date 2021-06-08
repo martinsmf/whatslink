@@ -13,6 +13,7 @@ module.exports = {
             description: request.payload.description,
         })
 
+
         if (!contact.name)
             return h.response({ message: 'Name is required' }).code(409)
 
@@ -21,6 +22,11 @@ module.exports = {
 
         if (!contact.description)
             return h.response({ message: 'Description is required' }).code(409)
+
+        let dup = await ContactModel.findOne({ number: contact.number }).exec();
+
+        if (dup)
+            return h.response({ error: 'Duplicated number.' }).code(409)
 
         try {
             let result = await contact.save()
