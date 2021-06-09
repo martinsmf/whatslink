@@ -6,10 +6,14 @@ module.exports = [
     path: '/contacts',
     handler: ContactController.list,
   },
-
   {
     method: 'POST',
     path: '/contacts',
     handler: ContactController.register
+  },
+  {
+    method: 'DELETE',
+    path: '/contacts/{contactId}',
+    handler: ContactController.remove
   }
 ];
