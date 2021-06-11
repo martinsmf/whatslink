@@ -15,6 +15,10 @@ class DashPage {
         DashElement.buttonSearch.click()
     }
 
+    remove(text) {
+        DashElement.singleButtonRemove(text).click()
+    }
+
 }
 
 export default new DashPage();

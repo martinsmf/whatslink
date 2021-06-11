@@ -1,4 +1,9 @@
+/// <reference types="Cypress" />
 class DashElement {
+
+    singleCardDash(target) {
+        return cy.contains('.card', target)
+    }
 
     get cardsDash() {
         return cy.get('.card')
@@ -30,6 +35,14 @@ class DashElement {
 
     get buttonSaveContact() {
         return cy.get('[data-qa-selector="save-contact"]')
+    }
+
+    get buttonRemove() {
+        return cy.get('.btn-remove')
+    }
+
+    singleButtonRemove(text) {
+        return this.singleCardDash(text).find('.btn-remove')
     }
 
     get smallNameAlert() {

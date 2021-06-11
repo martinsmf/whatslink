@@ -13,6 +13,12 @@ mongoose.connection.on('connected', () => {
     console.log('MongoDB connection')
 })
 
+console.log(process.env.NODE_ENV)
+
+if (process.env.NODE_ENV === 'test') {
+    mongoose.connection.dropDatabase()
+}
+
 //valida se a conexão falhou
 mongoose.connection.on('error', (error) => {
     console.log('MongoDB error' + error)

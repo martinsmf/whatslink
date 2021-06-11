@@ -81,7 +81,11 @@
             </div>
             <footer class="card-footer">
               <a href="#" class="card-footer-item">Conversar</a>
-              <a href="#" class="card-footer-item" @click="remove(contact._id)"
+              <a
+                data-qa-selector="delete-contact"
+                href="#"
+                class="card-footer-item btn-remove"
+                @click="remove(contact._id)"
                 >Apagar</a
               >
             </footer>
