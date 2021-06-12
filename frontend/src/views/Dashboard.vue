@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard">
+    <Navbar />
     <div class="container">
       <!-- Main container -->
       <nav class="level">
@@ -80,7 +81,9 @@
               </div>
             </div>
             <footer class="card-footer">
-              <a href="#" class="card-footer-item">Conversar</a>
+              <a :href="whatsLink(contact.number)" class="card-footer-item"
+                >Conversar</a
+              >
               <a
                 data-qa-selector="delete-contact"
                 href="#"
@@ -168,8 +171,13 @@
 <script>
 // @ is an alias to /src
 
+import Navbar from "@/components/Navbar.vue";
+
 export default {
   name: "dashboard",
+  components: {
+    Navbar
+  },
   data() {
     return {
       isLoading: false,
@@ -187,6 +195,9 @@ export default {
     };
   },
   methods: {
+    whatsLink(number) {
+      return `https://api.whatsapp.com/send?phone=55${number}`;
+    },
     search() {
       this.isLoading = true;
       if (this.searchInput != "") {
@@ -199,7 +210,6 @@ export default {
       } else {
         this.list();
       }
-      console.log(this.contactList);
     },
     create() {
       this.erroName = false;

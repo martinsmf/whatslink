@@ -41,9 +41,15 @@ class DashElement {
         return cy.get('.btn-remove')
     }
 
-    singleButtonRemove(text) {
+    buttonRemoveContact(text) {
         return this.singleCardDash(text).find('.btn-remove')
     }
+
+    buttonTalkContact(number) {
+        return cy.get(`a[href$="${number}"]`)
+    }
+
+
 
     get smallNameAlert() {
         return cy.get('.input-name small')

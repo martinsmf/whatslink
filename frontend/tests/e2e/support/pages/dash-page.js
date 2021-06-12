@@ -16,7 +16,7 @@ class DashPage {
     }
 
     remove(text) {
-        DashElement.singleButtonRemove(text).click()
+        DashElement.buttonRemoveContact(text).click()
     }
 
 }
