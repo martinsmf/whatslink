@@ -1,5 +1,6 @@
 <template>
   <div class="dashboard">
+    <Navbar />
     <div class="container">
       <!-- Main container -->
       <nav class="level">
@@ -32,7 +33,11 @@
                 />
               </p>
               <p class="control">
-                <button class="button is-primary" @click="search">
+                <button
+                  class="button is-primary"
+                  data-qa-selector="search"
+                  @click="search"
+                >
                   Buscar
                 </button>
               </p>
@@ -41,11 +46,21 @@
         </div>
       </nav>
 
-      <div class="contact-list columns is-multiline">
+      <div id="loader" v-if="isLoading === true">
+        <img src="../assets/loading.gif" alt="Loader" />
+      </div>
+
+      <article class="message is-danger" v-if="contactList.length === 0">
+        <div class="message-body">
+          Contato não encontrado :(
+        </div>
+      </article>
+
+      <div class="contact-list columns is-multiline" v-if="isLoading === false">
         <div
           class="column is-4"
           v-for="contact in contactList"
-          :key="contact.id"
+          :key="contact._id"
         >
           <div class="card">
             <div class="card-content">
@@ -66,8 +81,16 @@
               </div>
             </div>
             <footer class="card-footer">
-              <a href="#" class="card-footer-item">Conversar</a>
-              <a href="#" class="card-footer-item">Apagar</a>
+              <a :href="whatsLink(contact.number)" class="card-footer-item"
+                >Conversar</a
+              >
+              <a
+                data-qa-selector="delete-contact"
+                href="#"
+                class="card-footer-item btn-remove"
+                @click="remove(contact._id)"
+                >Apagar</a
+              >
             </footer>
           </div>
         </div>
@@ -148,10 +171,16 @@
 <script>
 // @ is an alias to /src
 
+import Navbar from "@/components/Navbar.vue";
+
 export default {
   name: "dashboard",
+  components: {
+    Navbar
+  },
   data() {
     return {
+      isLoading: false,
       contactList: [],
       showContactAddModal: false,
       erroName: false,
@@ -166,13 +195,18 @@ export default {
     };
   },
   methods: {
+    whatsLink(number) {
+      return `https://api.whatsapp.com/send?phone=55${number}`;
+    },
     search() {
-      console.log(this.searchInput);
+      this.isLoading = true;
       if (this.searchInput != "") {
-        this.contactList = this.contactList.filter(contact => {
-          if (contact.name) return contact.name === this.searchInput;
-          if (contact.number) return contact.number === this.searchInput;
-        });
+        this.contactList = this.contactList.filter(
+          contact =>
+            contact.number === this.searchInput ||
+            contact.name === this.searchInput
+        );
+        this.isLoading = false;
       } else {
         this.list();
       }
@@ -210,9 +244,19 @@ export default {
         }
       }
     },
+    remove(contactId) {
+      this.isLoading = true;
+      window.axios.delete(`/contacts/${contactId}`).then(async res => {
+        await res.data;
+        this.isLoading = false;
+        this.list();
+      });
+    },
     list() {
+      this.isLoading = true;
       window.axios.get("/contacts").then(async res => {
         this.contactList = await res.data;
+        this.isLoading = false;
       });
     }
   },

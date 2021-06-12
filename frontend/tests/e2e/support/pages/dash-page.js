@@ -10,6 +10,15 @@ class DashPage {
         DashElement.buttonSaveContact.click()
     }
 
+    search(number) {
+        DashElement.inputSearch.type(number)
+        DashElement.buttonSearch.click()
+    }
+
+    remove(text) {
+        DashElement.buttonRemoveContact(text).click()
+    }
+
 }
 
 export default new DashPage();

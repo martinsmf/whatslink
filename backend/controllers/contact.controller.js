@@ -13,6 +13,7 @@ module.exports = {
             description: request.payload.description,
         })
 
+
         if (!contact.name)
             return h.response({ message: 'Name is required' }).code(409)
 
@@ -22,6 +23,11 @@ module.exports = {
         if (!contact.description)
             return h.response({ message: 'Description is required' }).code(409)
 
+        let dup = await ContactModel.findOne({ number: contact.number }).exec();
+
+        if (dup)
+            return h.response({ error: 'Duplicated number.' }).code(409)
+
         try {
             let result = await contact.save()
             return h.response(result).code(200);
@@ -30,7 +36,14 @@ module.exports = {
         }
 
     },
-
+    async remove(request, h) {
+        try {
+            await ContactModel.deleteOne({ _id: request.params.contactId })
+            return h.response({}).code(204)
+        } catch (error) {
+            return h.response(error).code(500)
+        }
+    },
     async list(request, h) {
         const contacts = await ContactModel.find().exec()
         return contacts

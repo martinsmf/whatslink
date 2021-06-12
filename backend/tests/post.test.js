@@ -4,7 +4,7 @@ const Lab = require('@hapi/lab')
 const { init } = require('../server')
 
 const { expect } = Code
-const { before, describe, it } = exports.lab = Lab.script()
+const { before, describe, it, beforeEach } = exports.lab = Lab.script()
 
 describe('POST /contacts', () => {
     let resp;
@@ -54,7 +54,7 @@ describe('POST /contacts', () => {
 
     })
 
-    describe.only('quando o payload não tem os campos preenchidos', () => {
+    describe('quando o payload não tem os campos preenchidos', () => {
         let contact = [
             {
                 payload: {
@@ -88,7 +88,7 @@ describe('POST /contacts', () => {
             }
         ]
         contact.forEach((value, key) => {
-            before(async () => {
+            beforeEach(async () => {
                 var server = await init()
 
                 resp = await server.inject({
