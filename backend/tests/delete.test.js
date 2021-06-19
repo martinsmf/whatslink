@@ -66,4 +66,40 @@ describe('DELETE /contacts', () => {
             expect(resp.statusCode).to.equal(204)
         })
     })
+
+    describe('dado que não tenho acesso', () => {
+        const contact = {
+            name: 'Claro',
+            number: '31 77553 1144',
+            description: 'Operadora'
+        }
+
+        let server, resp, contactId
+
+        before(async () => {
+            server = await init()
+
+            resp = await server.inject({
+                method: 'post',
+                url: '/contacts',
+                payload: contact,
+                headers: { 'Authorization': userToekn }
+            })
+
+            contactId = resp.result._id
+        })
+
+        it('quando tento apago esse contato', async () => {
+            resp = await server.inject({
+                method: 'delete',
+                url: `/contacts/${contactId}`,
+                headers: { 'Authorization': 'abc4e04974b2800c742d2abc' }
+            })
+        })
+
+        it('deve retornar 401', () => {
+            expect(resp.statusCode).to.equal(401)
+        })
+    })
+
 })

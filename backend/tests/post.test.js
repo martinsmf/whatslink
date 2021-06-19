@@ -63,6 +63,54 @@ describe('POST /contacts', () => {
         })
     })
 
+    describe('quando o contato já existe', () => {
+
+        before(async () => {
+            var server = await init();
+
+            let contact = {
+                name: 'Saitama',
+                number: '31 99993214',
+                description: 'One punch man'
+            }
+
+            resp = await server.inject({
+                method: 'POST',
+                url: '/contacts',
+                payload: contact,
+                headers: { 'Authorization': userToken }
+            })
+
+            resp = await server.inject({
+                method: 'POST',
+                url: '/contacts',
+                payload: contact,
+                headers: { 'Authorization': userToken }
+            })
+        })
+
+        it('deve retornar 409', async () => {
+            expect(resp.statusCode).to.equal(409)
+        })
+    })
+
+    describe('quando não tenho acesso', () => {
+        before(async () => {
+            var server = await init();
+            resp = await server.inject({
+                method: 'POST',
+                url: '/contacts',
+                payload: null,
+                headers: { 'Authorization': 'abc4e04974b2800c742d2abc' }
+            })
+        })
+
+        it('deve retornar 401', async () => {
+            expect(resp.statusCode).to.equal(401)
+        })
+
+    })
+
     describe('quando o payload é nulo', () => {
         before(async () => {
             var server = await init();
