@@ -12,6 +12,10 @@ mongoose.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.on('connected', () => {
     console.log('MongoDB connection')
 })
+//valida se a conexão falhou
+mongoose.connection.on('error', (error) => {
+    console.log('MongoDB error' + error)
+})
 
 console.log(`Ambiente => ${process.env.NODE_ENV}`)
 
@@ -19,10 +23,6 @@ if (process.env.NODE_ENV === 'test') {
     mongoose.connection.dropDatabase()
 }
 
-//valida se a conexão falhou
-mongoose.connection.on('error', (error) => {
-    console.log('MongoDB error' + error)
-})
 
 const contactRoutes = require('./routes/contact.routes')
 const userRoutes = require('./routes/user.routes')
