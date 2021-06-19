@@ -7,6 +7,31 @@ const { expect } = Code
 const { before, describe, it, beforeEach } = exports.lab = Lab.script()
 
 describe('DELETE /contacts', () => {
+    let resp;
+    let userToekn;
+
+    before(async () => {
+        var serve = await init();
+        const user = { name: 'Gabriellen', email: 'gabriellen@gmail.com', password: 'pwd123' }
+
+        await serve.inject({
+            method: 'POST',
+            url: '/user',
+            payload: user
+        })
+
+        resp = await serve.inject({
+            method: 'POST',
+            url: '/session',
+            payload: {
+                email: user.email,
+                password: user.password
+            }
+        })
+
+        userToekn = resp.result.user_token
+    })
+
     describe('dado que eu tenho um contato indesejado', () => {
         const contact = {
             name: 'Claro',
@@ -22,7 +47,8 @@ describe('DELETE /contacts', () => {
             resp = await server.inject({
                 method: 'post',
                 url: '/contacts',
-                payload: contact
+                payload: contact,
+                headers: { 'Authorization': userToekn }
             })
 
             contactId = resp.result._id
@@ -31,7 +57,8 @@ describe('DELETE /contacts', () => {
         it('quando eu apago esse contato', async () => {
             resp = await server.inject({
                 method: 'delete',
-                url: `/contacts/${contactId}`
+                url: `/contacts/${contactId}`,
+                headers: { 'Authorization': userToekn }
             })
         })
 
