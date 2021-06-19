@@ -5,6 +5,9 @@ module.exports = {
         if (request.payload === null)
             return h.response({ message: 'Not JSON' }).code(400)
 
+        if (!request.payload.name)
+            return h.response({ message: 'Name is required.' })
+
         if (!request.payload.email)
             return h.response({ message: 'Email is required.' }).code(409)
 
@@ -12,6 +15,7 @@ module.exports = {
             return h.response({ message: 'Password is required.' }).code(409)
 
         const user = new UserModel({
+            name: request.payload.name,
             email: request.payload.email,
             password: md5(request.payload.password)
         })
@@ -23,7 +27,13 @@ module.exports = {
 
         try {
             let result = await user.save()
-            return h.response(result).code(200)
+            let cipher = {
+                userId: result._id,
+                name: result.name,
+                email: result.email.replace(/([A-z]|[0-9])([A-z]|[0-9])([A-z]|[0-9])/, '***'),
+                password: result.password
+            }
+            return h.response(cipher).code(200)
         } catch (error) {
             return h.response(error).code(500)
         }
@@ -42,7 +52,7 @@ module.exports = {
             if (!user)
                 return h.response({ error: 'Usuário ou senha inválidos' }).code(401)
 
-            return h.response({ user_token: user._id }).code(200)
+            return h.response({ user_token: user._id, name: user.name }).code(200)
         } catch (error) {
             return h.response(error).code(500)
         }
