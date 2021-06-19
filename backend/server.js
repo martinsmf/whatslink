@@ -13,7 +13,7 @@ mongoose.connection.on('connected', () => {
     console.log('MongoDB connection')
 })
 
-console.log(process.env.NODE_ENV)
+console.log(`Ambiente => ${process.env.NODE_ENV}`)
 
 if (process.env.NODE_ENV === 'test') {
     mongoose.connection.dropDatabase()

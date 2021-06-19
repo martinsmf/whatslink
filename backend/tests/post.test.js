@@ -8,6 +8,30 @@ const { before, describe, it, beforeEach } = exports.lab = Lab.script()
 
 describe('POST /contacts', () => {
     let resp;
+    let userToken;
+    before(async () => {
+        var server = await init();
+        const user = { name: 'Matheus', email: 'matheus_martins@gmail.com', password: 'pwd123' }
+
+        await server.inject({
+            method: 'POST',
+            url: '/user',
+            payload: user
+        })
+
+        resp = await server.inject({
+            method: 'POST',
+            url: '/session',
+            payload: {
+                email: user.email,
+                password: user.password
+            }
+        })
+
+        // console.log(resp.result)
+
+        userToken = resp.result.user_token
+    })
 
     describe('quando realizo uma requisição post', () => {
 
@@ -23,7 +47,8 @@ describe('POST /contacts', () => {
             resp = await server.inject({
                 method: 'POST',
                 url: '/contacts',
-                payload: contact
+                payload: contact,
+                headers: { 'Authorization': userToken }
             })
         })
 
@@ -44,7 +69,8 @@ describe('POST /contacts', () => {
             resp = await server.inject({
                 method: 'POST',
                 url: '/contacts',
-                payload: null
+                payload: null,
+                headers: { 'Authorization': userToken }
             })
         })
 
@@ -94,7 +120,8 @@ describe('POST /contacts', () => {
                 resp = await server.inject({
                     method: 'POST',
                     url: '/contacts',
-                    payload: value.payload
+                    payload: value.payload,
+                    headers: { 'Authorization': userToken }
                 })
             })
 
