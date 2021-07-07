@@ -1,6 +1,14 @@
 /// <reference types="Cypress" />
 class DashElement {
 
+    get dash() {
+        return cy.get('.dashboard')
+    }
+
+    get titleDash() {
+        return cy.get('[data-qa="title-h4"]')
+    }
+
     singleCardDash(target) {
         return cy.contains('.card', target)
     }
@@ -49,13 +57,11 @@ class DashElement {
         return cy.get(`a[href$="${number}"]`)
     }
 
-
-
     get smallNameAlert() {
         return cy.get('.input-name small')
     }
 
-    get samllNumberAlert() {
+    get smallNumberAlert() {
         return cy.get('.input-number small')
     }
 

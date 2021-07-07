@@ -7,7 +7,9 @@
         <!-- Left side -->
         <div class="level-left">
           <div class="level-item">
-            <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
+            <h4 data-qa="title-h4" class="title is-4">
+              Seu gerenciador digital de contatos
+            </h4>
           </div>
         </div>
 

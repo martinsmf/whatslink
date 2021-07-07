@@ -11,9 +11,7 @@ describe('conversar', () => {
 
     context(`Dado que desejo conversar com ${contact.name}`, () => {
         before(() => {
-            cy.api_createContact(contact).then(response => {
-                cy.log(JSON.stringify(response.body))
-            })
+            cy.api_createContact(contact)
         })
 
         it('Quando acesso o dashboard', () => {

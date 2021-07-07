@@ -14,9 +14,11 @@
                   <div class="field">
                     <p class="control has-icons-left has-icons-right">
                       <input
+                        name="email"
                         class="input"
                         type="email"
                         placeholder="Seu email"
+                        v-model="form.email"
                       />
                       <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
@@ -29,18 +31,32 @@
                   <div class="field">
                     <p class="control has-icons-left">
                       <input
+                        name="password"
                         class="input"
                         type="password"
                         placeholder="Sua senha"
+                        v-model="form.password"
                       />
                       <span class="icon is-small is-left">
                         <i class="fas fa-lock"></i>
                       </span>
                     </p>
                   </div>
+
+                  <article v-if="alertError" class="message is-danger">
+                    <div class="message-body">
+                      {{ alertError }}
+                    </div>
+                  </article>
+
                   <div class="field">
                     <p class="control">
-                      <button class="button is-success">
+                      <button
+                        id="signIn"
+                        type="button"
+                        class="button is-success"
+                        @click="login()"
+                      >
                         Entrar
                       </button>
                     </p>
@@ -58,6 +74,45 @@
     </section>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      alertError: "",
+      form: {
+        email: "",
+        password: ""
+      }
+    };
+  },
+  methods: {
+    login() {
+      if (this.form.email === "") {
+        this.alertError = "Oops. Por favor informe seu email";
+        return null;
+      }
+      if (this.form.password === "") {
+        this.alertError = "Oops. Por favor informe sua senha";
+        return null;
+      }
+
+      window.axios
+        .post("/session", this.form)
+        .then(async res => {
+          const resp = await res.data;
+          localStorage.setItem("user_token", resp.user_token);
+          this.$router.push("/dashboard");
+        })
+        .catch(error => {
+          this.alertError = "Email e/ou senha incorreto";
+        });
+      // console.log(this.form);
+    }
+  }
+};
+</script>
+
 
 <style scoped>
 .login {
