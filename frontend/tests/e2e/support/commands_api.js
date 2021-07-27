@@ -22,6 +22,7 @@ Cypress.Commands.add('api_createContact', ({ name, number, description }) => {
         url: `${url}/contacts`,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('user_token')
         },
         body: {
             name: name,

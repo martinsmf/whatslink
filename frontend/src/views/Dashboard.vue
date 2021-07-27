@@ -2,44 +2,37 @@
   <div class="dashboard">
     <Navbar />
     <div class="container">
-      <!-- Main container -->
       <nav class="level">
         <!-- Left side -->
         <div class="level-left">
           <div class="level-item">
-            <h4 data-qa="title-h4" class="title is-4">
-              Seu gerenciador digital de contatos
-            </h4>
+            <h4 class="title is-4">Seu gerenciador digital de contatos</h4>
           </div>
         </div>
 
         <!-- Right side -->
         <div class="level-right">
           <div class="level-item">
-            <b-button
-              label="+"
-              type="is-success"
+            <button
+              id="addNewContact"
+              class="button is-success"
               @click="showContactAddModal = true"
-              data-qa-selector="add_contact"
-            />
+            >
+              +
+            </button>
           </div>
-
           <div class="level-item">
             <div class="field has-addons">
               <p class="control">
                 <input
-                  v-model="searchInput"
                   class="input"
                   type="text"
+                  v-model="searchInput"
                   placeholder="Número do Whats"
                 />
               </p>
               <p class="control">
-                <button
-                  class="button is-primary"
-                  data-qa-selector="search"
-                  @click="search"
-                >
+                <button class="button is-primary" @click="search">
                   Buscar
                 </button>
               </p>
@@ -78,16 +71,13 @@
                 </div>
               </div>
 
-              <div class="content">
-                {{ contact.description }}
-              </div>
+              <div class="content">{{ contact.description }}</div>
             </div>
             <footer class="card-footer">
-              <a :href="whatsLink(contact.number)" class="card-footer-item"
+              <a :href="zaplink(contact.number)" class="card-footer-item"
                 >Conversar</a
               >
               <a
-                data-qa-selector="delete-contact"
                 href="#"
                 class="card-footer-item btn-remove"
                 @click="remove(contact._id)"
@@ -104,10 +94,9 @@
         trap-focus
         :destroy-on-hide="false"
         aria-role="dialog"
-        aria-label="Example Modal"
         aria-modal
       >
-        <form action="">
+        <form action>
           <div class="modal-card" style="width: 450px">
             <header class="modal-card-head">
               <p class="modal-card-title">Novo Contato</p>
@@ -118,50 +107,47 @@
               />
             </header>
             <section class="modal-card-body">
-              <div class="field input-name">
+              <div class="field input-full-name">
                 <input
-                  v-model="form.name"
-                  type="text"
                   class="input is-primary"
+                  v-model="form.name"
                   placeholder="Nome completo"
                 />
-                <small class="has-text-danger" v-if="erroName === true"
-                  >Nome é obrigatório</small
+                <small class="has-text-danger" v-if="errorName === true"
+                  >Nome é obrigatório.</small
                 >
               </div>
-
               <div class="field input-number">
                 <input
-                  v-model="form.number"
-                  type="text"
                   class="input is-primary"
+                  v-model="form.number"
                   placeholder="WhatsApp"
                 />
-                <small class="has-text-danger" v-if="erroNumber === true"
-                  >WhatsApp é obrigatório</small
+                <small class="has-text-danger" v-if="errorNumber === true"
+                  >WhatsApp é obrigatório.</small
                 >
               </div>
 
               <div class="field text-description">
                 <textarea
-                  v-model="form.description"
-                  type="text"
                   class="textarea is-primary"
+                  v-model="form.description"
                   placeholder="Assunto"
-                />
-                <small class="has-text-danger" v-if="erroDescription === true"
-                  >Assunto é obrigatório</small
+                ></textarea>
+                <small class="has-text-danger" v-if="errorDescription === true"
+                  >Assunto é obrigatório.</small
                 >
               </div>
             </section>
             <footer class="modal-card-foot">
-              <b-button
-                label="Cadastrar"
-                class="is-success"
+              <button
+                id="saveButton"
                 type="button"
+                class="button is-success"
                 @click="create"
-                data-qa-selector="save-contact"
-              />
+              >
+                Cadastrar
+              </button>
             </footer>
           </div>
         </form>
@@ -171,12 +157,10 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import Navbar from "@/components/Navbar.vue";
 
 export default {
-  name: "dashboard",
+  name: "Dashboard",
   components: {
     Navbar
   },
@@ -185,28 +169,27 @@ export default {
       isLoading: false,
       contactList: [],
       showContactAddModal: false,
-      erroName: false,
-      erroNumber: false,
-      erroDescription: false,
+      errorName: false,
+      errorNumber: false,
+      errorDescription: false,
       searchInput: "",
       form: {
-        name: "",
-        number: "",
-        description: ""
+        name: " ",
+        number: " ",
+        description: " "
       }
     };
   },
   methods: {
-    whatsLink(number) {
+    zaplink(number) {
       return `https://api.whatsapp.com/send?phone=55${number}`;
     },
     search() {
+      //console.log(this.searchInput)
       this.isLoading = true;
       if (this.searchInput != "") {
         this.contactList = this.contactList.filter(
-          contact =>
-            contact.number === this.searchInput ||
-            contact.name === this.searchInput
+          contact => contact.number === this.searchInput
         );
         this.isLoading = false;
       } else {
@@ -214,43 +197,37 @@ export default {
       }
     },
     create() {
-      this.erroName = false;
-      this.erroNumber = false;
-      this.erroDescription = false;
+      this.errorName = false;
+      this.errorNumber = false;
+      this.errorDescription = false;
 
       if (this.form.name === "") {
-        this.erroName = true;
+        this.errorName = true;
       }
 
       if (this.form.number === "") {
-        this.erroNumber = true;
+        this.errorNumber = true;
       }
 
       if (this.form.description === "") {
-        this.erroDescription = true;
+        this.errorDescription = true;
       }
 
       if (
-        this.erroName === false &&
-        this.erroNumber === false &&
-        this.erroDescription === false
+        this.errorName === false &&
+        this.errorNumber === false &&
+        this.errorDescription === false
       ) {
-        try {
-          window.axios.post("/contacts", this.form).then(async res => {
-            await res.data;
-            this.showContactAddModal = false;
-            this.list();
-          });
-        } catch (erro) {
-          console.log(erro);
-        }
+        window.axios.post("/contacts", this.form).then(async res => {
+          await res.data;
+          this.showContactAddModal = false;
+          this.list();
+        });
       }
     },
     remove(contactId) {
-      this.isLoading = true;
-      window.axios.delete(`/contacts/${contactId}`).then(async res => {
+      window.axios.delete("/contacts/" + contactId).then(async res => {
         await res.data;
-        this.isLoading = false;
         this.list();
       });
     },

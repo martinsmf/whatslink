@@ -12,6 +12,9 @@ const auth = {
 module.exports = {
 
     async register(request, h) {
+        console.log(request.payload)
+        console.log(request.headers.authorization)
+
         const userId = request.headers.authorization
 
         try {

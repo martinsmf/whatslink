@@ -2,81 +2,70 @@
 
 import DashPage from '../support/pages/dash-page'
 import DashElement from '../support/elements/dash-element'
+import LoginPage from '../support/pages/login-page'
 
 describe('Cadastro de contatos', () => {
-    describe('Novo  contato', () => {
+    const user = { name: 'Bruce Wayne', email: 'bruce.wayne@wayneenterprises', password: 'pwd123' }
+
+    before(() => {
+        cy.api_createUser(user)
+        LoginPage.signIn(user)
+        DashElement.dash.should('be.visible')
+    })
+
+    describe('Novo contato', () => {
 
         describe('Quando submeto o cadastro completo', () => {
             let contact = {
                 name: 'Matheus',
-                number: '31 9999-999',
-                description: 'Solicitar orçamento para consultoria em QA'
+                number: '31 999885522',
+                description: 'Novo contato'
             }
-
             before(() => {
-                cy.dash()
                 DashPage.create(contact)
             })
-
-            it('deve cadastrar esse contato', () => {
-                cy.get('.contact-list').contains(contact.name)
+            it('Deve cadastrar esse contato', () => {
+                DashElement.cardsDash.should('contain', contact.name)
             })
-
         })
 
         describe('Quando submeto o cadastro sem o nome', () => {
             let contact = {
-                name: '',
-                number: '31 9999-999',
-                description: 'Solicitar orçamento para consultoria em QA'
+                number: '31 999885523',
+                description: 'Novo contato'
             }
-
             before(() => {
-                cy.dash()
                 DashPage.create(contact)
             })
-
-            it('deve mostrar uma notificação', () => {
-                DashElement.smallNameAlert.contains('Nome é obrigatório')
+            it('Deve cadastrar esse contato', () => {
+                DashElement.smallNameAlert.should('have.text', 'Nome é obrigatório.')
             })
-
         })
 
-        describe('Quando submeto o cadastro sem o whatsapp', () => {
+        describe('Quando submeto o cadastro sem o número', () => {
             let contact = {
                 name: 'Matheus',
-                number: '',
-                description: 'Solicitar orçamento para consultoria em QA'
+                description: 'Novo contato'
             }
-
             before(() => {
-                cy.dash()
                 DashPage.create(contact)
             })
-
-            it('deve mostrar uma notificação', () => {
-                DashElement.samllNumberAlert.contains('WhatsApp é obrigatório')
+            it('Deve cadastrar esse contato', () => {
+                DashElement.smallNumberAlert.should('have.text', 'WhatsApp é obrigatório.')
             })
-
         })
 
-        describe('Quando submeto o cadastro sem a descrição', () => {
+        describe('Quando submeto o cadastro sem o assunto', () => {
             let contact = {
                 name: 'Matheus',
-                number: '31 9999-999',
-                description: ''
+                number: '31 999885522'
             }
-
             before(() => {
-                cy.dash()
                 DashPage.create(contact)
             })
-
-            it('deve mostrar uma notificação', () => {
-                DashElement.smallDescriptionAlert.contains('Assunto é obrigatório')
+            it('Deve cadastrar esse contato', () => {
+                DashElement.smallDescriptionAlert.should('have.text', 'Assunto é obrigatório.')
             })
-
         })
-
     })
 })

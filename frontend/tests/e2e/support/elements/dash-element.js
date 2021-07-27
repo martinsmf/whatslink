@@ -22,7 +22,7 @@ class DashElement {
     }
 
     get inputFullName() {
-        return cy.get('.input-name input')
+        return cy.get('.input-full-name input')
     }
 
     get inputNumber() {
@@ -38,11 +38,15 @@ class DashElement {
     }
 
     get buttonAddContact() {
-        return cy.get('[data-qa-selector="add_contact"]')
+        return cy.get('#addNewContact')
     }
 
     get buttonSaveContact() {
-        return cy.get('[data-qa-selector="save-contact"]')
+        return cy.get('#saveButton')
+    }
+
+    get buttonClose() {
+        return cy.get('.delete')
     }
 
     get buttonRemove() {
@@ -58,7 +62,7 @@ class DashElement {
     }
 
     get smallNameAlert() {
-        return cy.get('.input-name small')
+        return cy.get('.input-full-name small')
     }
 
     get smallNumberAlert() {

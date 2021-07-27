@@ -12,6 +12,10 @@ class LoginElements {
     get buttonSigIn() {
         return cy.get('#signIn')
     }
+
+    get alertMessage() {
+        return cy.get('.message-body')
+    }
 }
 
 export default new LoginElements();
